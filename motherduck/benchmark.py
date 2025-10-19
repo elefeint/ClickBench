@@ -1,4 +1,5 @@
 import duckdb
+import json
 import os
 import sys
 import subprocess
@@ -38,16 +39,13 @@ def print_results(run_metadata, query_results):
     with open(filename, 'w') as f:
         print("{", file=f)
         for key in run_metadata:
-            print(f'\t"{key}": {run_metadata[key]},', file=f)
+            print(f'\t"{key}": {json.dumps(run_metadata[key])},', file=f)
 
         print('\t"result": [', file=f)
         num_lines = len(query_results)
         for i in range(num_lines):
             print(f"\t\t{query_results[i]}", end='', file=f)
-            if i < num_lines - 1:
-              print(",", file=f)
-            else:
-              print(file=f)
+            print("," if i < num_lines - 1 else "", file=f)
 
         print("\t]\n}", file=f)
 
@@ -121,13 +119,13 @@ def run_queries():
 if __name__ == "__main__":
     instance_type = os.getenv('motherduck_instance_type', 'unknown instance type')
     run_metadata = {
-        "system": '"MotherDuck"',
-        "date": f'"{time.strftime("%Y-%m-%d")}"',
-        "machine": f'"Motherduck: {instance_type}"',
+        "system": "MotherDuck",
+        "date": time.strftime("%Y-%m-%d"),
+        "machine": f"Motherduck: {instance_type}",
         "cluster_size": 1,
-        "proprietary": '"yes"',
-        "tuned": '"no"',
-        "tags": '["C++", "column-oriented", "serverless", "managed"]',
+        "proprietary": "yes",
+        "tuned": "no",
+        "tags": ["C++", "column-oriented", "serverless", "managed"],
     }
     load_data(run_metadata)
 
