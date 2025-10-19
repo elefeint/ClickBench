@@ -1,6 +1,5 @@
 import duckdb
 import os
-import psutil
 import sys
 import subprocess
 import timeit
@@ -35,7 +34,7 @@ def convert_human_readable_size_to_bytes(size_with_unit):
         raise Exception(f"Unparseable human readable database size: {size_with_unit}")
 
 def print_results(run_metadata, query_results):
-    filename = os.getenv('motherduck_instance_type', DEFAULT_OUTPUT_FILE) + ".json";
+    filename = os.getenv('motherduck_instance_type', DEFAULT_OUTPUT_FILE) + ".json"
     with open(filename, 'w') as f:
         print("{", file=f)
         for key in run_metadata:
@@ -55,8 +54,8 @@ def print_results(run_metadata, query_results):
 def load_data(run_metadata):
     con = duckdb.connect(database="md:", read_only=False)
     print('Connected to MotherDuck; loading the data', file=sys.stderr)
-    # ELENA PUT IT BACK
-    #con.execute('CREATE OR REPLACE DATABASE clickbench')
+
+    con.execute('CREATE OR REPLACE DATABASE clickbench')
     con.execute('USE clickbench')
 
     # disable preservation of insertion order
@@ -64,20 +63,20 @@ def load_data(run_metadata):
 
     # perform the actual load
     start = timeit.default_timer()
-    # con.execute(open("create.sql").read())
+    con.execute(open("create.sql").read())
     file = '''https://datasets.clickhouse.com/hits_compatible/hits.parquet'''
-    # The parquet file doen't have the timestamps as timestamps, so we
+    # The parquet file doesn't have the timestamps as timestamps, so we
     # need to coerce them into proper timestamps.
-    # con.execute(f"""
-    #     INSERT INTO hits
-    #     SELECT *
-    #     REPLACE
-    #     (epoch_ms(EventTime * 1000) AS EventTime,
-    #      epoch_ms(ClientEventTime * 1000) AS ClientEventTime,
-    #      epoch_ms(LocalEventTime * 1000) AS LocalEventTime,
-    #      DATE '1970-01-01' + INTERVAL (EventDate) DAYS AS EventDate)
-    #     FROM read_parquet('{file}', binary_as_string=True)
-    #      """)
+    con.execute(f"""
+        INSERT INTO hits
+        SELECT *
+        REPLACE
+        (epoch_ms(EventTime * 1000) AS EventTime,
+         epoch_ms(ClientEventTime * 1000) AS ClientEventTime,
+         epoch_ms(LocalEventTime * 1000) AS LocalEventTime,
+         DATE '1970-01-01' + INTERVAL (EventDate) DAYS AS EventDate)
+        FROM read_parquet('{file}', binary_as_string=True)
+         """)
     end = timeit.default_timer()
     run_metadata["Load time"] = round(end - start, 3)
 
@@ -135,4 +134,3 @@ if __name__ == "__main__":
     query_output = run_queries()
 
     print_results(run_metadata, query_output.strip().split('\n'))
-
