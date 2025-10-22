@@ -34,7 +34,7 @@ def convert_human_readable_size_to_bytes(size_with_unit):
     else:
         raise Exception(f"Unparseable human readable database size: {size_with_unit}")
 
-def print_results(run_metadata, query_results):
+def write_result_to_file(run_metadata, query_results):
     filename = os.getenv('motherduck_instance_type', DEFAULT_OUTPUT_FILE) + ".json"
     with open(filename, 'w') as f:
         print("{", file=f)
@@ -131,4 +131,4 @@ if __name__ == "__main__":
 
     query_output = run_queries()
 
-    print_results(run_metadata, query_output.strip().split('\n'))
+    write_result_to_file(run_metadata, query_output.strip().split('\n'))
