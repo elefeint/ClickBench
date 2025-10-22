@@ -8,8 +8,12 @@
 Pass `motherduck_instance_type=<INSTANCE_TYPE>` to determine the report name and description.
 By default, the report will be named `log.json` and the instance type will be reported as "unknown instance type"
 
+```
+motherduck_instance_type=<INSTANCE_TYPE> motherduck_token=<TOKEN> bash benchmark.sh
+```
+
 By default, running `benchmark.sh` will try to install python.
 To skip that step:
 ```
- bash benchmark.sh --skip-setup
+motherduck_instance_type=<INSTANCE_TYPE> motherduck_token=<TOKEN> bash benchmark.sh --skip-setup
 ```
