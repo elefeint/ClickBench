@@ -91,7 +91,7 @@ def load_data(run_metadata):
     else:
         raise Exception(f"pragma_database_size() did not return the expected value: {result}")
 
-    print(f'Finished loading the data in {run_metadata["Load time"]}; data size = {run_metadata["Data size"]}', file=sys.stderr)
+    print(f'Finished loading the data in {run_metadata["load_time"]}; data size = {run_metadata["data_size"]}', file=sys.stderr)
 
 def run_queries():
     # Going through a shell script (run.sh) and back to python (query.py) is not functionally necessary,
