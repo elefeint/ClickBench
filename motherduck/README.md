@@ -5,8 +5,9 @@
 
 ## Running the benchmark
 
-Pass `motherduck_instance_type=<INSTANCE_TYPE>` to determine the report name and description.
-By default, the report will be named `log.json` and the instance type will be reported as "unknown instance type"
+Pass `motherduck_instance_type=<INSTANCE_TYPE>` to modify:
+* the report filename name (log.json by default)
+* "machine" field in the report ("Motherduck: unknown instance type" by default).
 
 ```
 motherduck_instance_type=<INSTANCE_TYPE> motherduck_token=<TOKEN> bash benchmark.sh
