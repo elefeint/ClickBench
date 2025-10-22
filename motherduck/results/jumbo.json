@@ -6,8 +6,8 @@
 	"proprietary": "yes",
 	"tuned": "no",
 	"tags": ["C++", "column-oriented", "serverless", "managed"],
-	"Load time": 75.859,
-	"Data size": 23622320128,
+	"load_time": 75.859,
+	"data_size": 23622320128,
 	"result": [
 		[0.025,0.015,0.015],
 		[0.103,0.012,0.012],

@@ -76,7 +76,7 @@ def load_data(run_metadata):
         FROM read_parquet('{file}', binary_as_string=True)
          """)
     end = timeit.default_timer()
-    run_metadata["Load time"] = round(end - start, 3)
+    run_metadata["load_time"] = round(end - start, 3)
 
     # Print the database size. For MotherDuck, we get a formatted string.
     result = con.execute("""
@@ -87,7 +87,7 @@ def load_data(run_metadata):
 
     if result and result[0]:
         print(f"Human readable database size: {result[0]}", file=sys.stderr)
-        run_metadata["Data size"] = convert_human_readable_size_to_bytes(result[0])
+        run_metadata["data_size"] = convert_human_readable_size_to_bytes(result[0])
     else:
         raise Exception(f"pragma_database_size() did not return the expected value: {result}")
 
