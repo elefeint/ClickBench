@@ -2,25 +2,17 @@
 
 import duckdb
 import timeit
+import psutil
 import sys
 
 query = sys.stdin.read()
-print(f"running {query}", file=sys.stderr)
+print(query)
 
-con = duckdb.connect(database="md:clickbench", read_only=False)
-print('[', end='')
-
+con = duckdb.connect('md:')
+con = duckdb.connect(database="md:ClickBench", read_only=False)
 for try_num in range(3):
-    if try_num > 0:
-        print(',', end='')
-
-    try:
-        start = timeit.default_timer()
-        results = con.sql(query).fetchall()
-        end = timeit.default_timer()
-        print(round(end - start, 3), end='')
-    except Exception as e:
-        print('null', end='')
-        print(f"query <{query.strip()}> errored out on attempt <{try_num+1}>: {e}", file=sys.stderr)
-
-print(']')
+    start = timeit.default_timer()
+    results = con.sql(query).fetchall()
+    end = timeit.default_timer()
+    print(round(end - start, 3))
+    del results
